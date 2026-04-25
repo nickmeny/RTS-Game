@@ -2,7 +2,7 @@
 #define ANIMATION_H
 
 #include "raylib.h"
-
+#include "../basic_headers/basics.h"
 //Animation struct is used to store the spreetshit for every animation and the frames 
 typedef struct 
 {

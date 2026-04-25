@@ -1,5 +1,5 @@
 #include "controls.h"
-
+#include "./util/offsets.h"
 /// @brief This function Handles the mouse control
 /// @param data (UnitData*)  the unit data of the unit
 /// @param unitList (Unit*) the list of the spawn units
@@ -12,7 +12,7 @@ void HandleMouseInputs(GameContext *ctx)
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
     {
         Vector2 mouseTarget = GetMousePosition();
-        Point targetTile = {(int)mouseTarget.x / 30, (int)mouseTarget.y / 30};
+        // Point targetTile = {(int)mouseTarget.x / 30, (int)mouseTarget.y / 30};
 
         for (int i = 0; i < *(ctx->unitCount); i++)
         {
@@ -30,9 +30,7 @@ void HandleMouseInputs(GameContext *ctx)
         {
             Vector2 pos = GetMousePosition();
             // This section is only for the visuals to make the asset to spawn in the tip of the mouse
-            float offsetW = (ctx->warriorData->Idle.texture.width / (float)ctx->warriorData->Idle.frameNum) / 2;
-            float offsetH = (float)ctx->warriorData->Idle.texture.height / 2;
-            Vector2 adjustedPos = {pos.x - offsetW, pos.y - offsetH};
+            Vector2 adjustedPos = {pos.x - (float)ctx->warriorData->body.bodyCenter[0].x, pos.y - (float)ctx->warriorData->body.bodyCenter[0].y};
 
             // Create and save the warrior in the list
             ctx->unitList[*(ctx->unitCount)] = Create_Warrior(ctx->warriorData, adjustedPos, ctx->unitCount);

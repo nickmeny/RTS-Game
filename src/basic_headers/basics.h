@@ -6,4 +6,11 @@ typedef struct {
     int y;
 }Point;
 
+typedef struct {
+    int minX;
+    int maxX;
+    int minY;
+    int maxY;
+} SpriteOffsets;
+
 #endif

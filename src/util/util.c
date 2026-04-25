@@ -1,7 +1,6 @@
 #include "animation.h"
 #include "util.h"
 
-
 /**
  * @brief This function Take a image path and prefere scale to resize and return a texture2d
  **/
@@ -30,8 +29,7 @@ void Animator(Animation anim, AnimateState *state, Vector2 pos,bool flip)
     Rectangle dest = { pos.x, pos.y, frameWidth, (float)anim.texture.height };
     Vector2 origin = { 0, 0 };
     DrawTexturePro(anim.texture, sourceRec, dest, origin, 0.0f, WHITE);
-    // DrawTextureRec(anim.texture, sourceRec, dest,pos, WHITE);
-    // 2. Update the timer and current frame
+
     state->timer += dt;
     if (state->timer >= UPDATE_TIME)
     {
@@ -67,4 +65,42 @@ void UnitCollision(Unit* self, Unit* unitList, int count) {
             self->pos = Vector2Add(self->pos, Vector2Scale(pushDir, overlap * 0.5f));
         }
     }
+}
+
+
+/// @brief Func για να βρισκω το μεγεθος που εχει ενα frame.
+/// @param frame Vector2, εχει το Height και το Width
+/// @param offs SpriteOffsets, τα offsets του Sprite 
+/// @return Vector2
+Vector2 Get_Body_Geometry(const Vector2 frame,const SpriteOffsets offs)
+{
+    float bodyWidth  = frame.x- offs.minX - offs.maxX;
+    float bodyHeight = frame.y - offs.minY-offs.maxY;
+    return (Vector2){bodyWidth,bodyHeight};
+}
+
+
+/// @brief Func για να παρινω το Width και το Height απο ενα texture
+/// @param anim 
+/// @return Vector2
+Vector2 Get_Frame_W_H(const Animation anim)
+{
+    float frameWidth = (float)anim.texture.width / anim.frameNum;
+    float frameHeight = (float)anim.texture.height;
+    return (Vector2){frameWidth,frameHeight};
+}
+
+/// @brief Συναρτηση για να βρισκω το κεντρο του sprite(Μονο της μορφης που υπαρχει, οχι γενικα του texture)
+/// @param anim Animation struct
+/// @param offs SpriteOffsets, τα offsets του Sprite 
+/// @return Vector2
+Vector2 Find_Center(const Animation anim,const SpriteOffsets offs){
+    Vector2 frame = Get_Frame_W_H(anim);
+    Vector2 body = Get_Body_Geometry(frame,offs);
+    //το -3 το εχω βαλει επειδη ναι μεν οι υπολογισμοι ειναι σωστοι
+    // αλλα στο ματι φαινεται καλυτερα αν παει 3px ποιο εκει
+    float centerX = offs.minX + (body.x / 2.0f) - 3;
+    float centerY = offs.minY + (body.y / 2.0f);
+
+    return (Vector2){centerX,centerY};  
 }

@@ -16,8 +16,6 @@ typedef enum {
 
 
 
-
-
 typedef struct 
 {
     int **costs;
@@ -25,10 +23,16 @@ typedef struct
     int unitsAssigned;
 }MovementGroup;
 
-
+//This struct is to save the basic geometry of a unit in all states
+typedef struct {
+    Vector2* bodyGeometry; // A table to store the body height and width for all animations the Unit has
+    Vector2* bodyCenter; // A table to store the center of a Unit for all of its animation
+    Vector2* frameGeometry; // A table to store the frame Height and Width for its Animation
+}Body;
 
 //UnitData Struct. This is for the "Image". That struct Initialized one time in start of the game and then it read from the memmory
 typedef struct {
+    //Animations
     Animation Idle;
     Animation Run;
     Animation Attack;
@@ -37,6 +41,10 @@ typedef struct {
     float HitBoxRadius;
     int health;
     int speed;
+
+    //Sprite Attributes
+    Body body;
+    
 }UnitData;
 
 //Unit struct. THis is for every unit

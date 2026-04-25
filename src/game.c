@@ -59,6 +59,11 @@ int main(void)
     }
     UnloadTexture(warriorData.Idle.texture);
     UnloadTexture(warriorData.Run.texture);
+
+    
+    free(warriorData.body.bodyCenter);
+    free(warriorData.body.frameGeometry);
+    free(warriorData.body.bodyGeometry);
     free(units);
     free(UnitsData);
     CloseWindow();
