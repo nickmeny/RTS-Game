@@ -3,7 +3,7 @@
 
 #include "raylib.h"
 #include "../util/animation.h"
-
+#include "../basic_headers/basics.h"
 //Forward declaration
 typedef struct Unit Unit;
 
@@ -46,7 +46,6 @@ struct Unit
     bool isFacingLeft;
     int id; //a uniq id
     int curHealth; //health of its unit right now
-    int ** flowfield;
     UnitData * data;
     Vector2 targetPos;
     Vector2 pos;

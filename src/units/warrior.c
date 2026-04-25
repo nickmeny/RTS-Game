@@ -41,23 +41,7 @@ void DrawWarrior(Unit * self)
 
 
 void UpdateWarrior(Unit * self){
-    if(self->currentState == STATE_RUN){
-        int tx = (int)(self->pos.x/32);
-        int ty = (int)(self->pos.y/32);
-        if(tx>= 0 && tx<MAP_HEIGHT && ty >=0 && ty < MAP_HEIGHT)
-        {
-            if(self->flowfield[ty][tx] == 0)
-            {
-                self->currentState = STATE_IDLE;
-                return;
-            }
-            Vector2 dir = get_flow_direction(self->flowfield,tx,ty,MAP_HEIGHT,MAP_WIDTH);
-            self->pos.x += dir.x * self->data->speed * GetFrameTime();
-            self->pos.y += dir.y * self->data->speed * GetFrameTime();
-            if (dir.x < 0) self->isFacingLeft = true;
-            else if (dir.x > 0) self->isFacingLeft = false;
-        }
-    }
+    return;
 }
 //This Func returns a UnitData initializetion.
 UnitData Init_Warrior()

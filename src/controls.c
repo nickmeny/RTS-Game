@@ -14,13 +14,6 @@ void HandleMouseInputs(GameContext *ctx)
         Vector2 mouseTarget = GetMousePosition();
         Point targetTile = {(int)mouseTarget.x / 30, (int)mouseTarget.y / 30};
 
-        // Σιγουρέψου ότι ο στόχος είναι εντός χάρτη
-        if (targetTile.x >= 0 && targetTile.x < ctx->mapW &&
-            targetTile.y >= 0 && targetTile.y < ctx->mapH)
-        {
-            // Τρέξε το Pathfinding για ΟΛΕΣ τις μονάδες
-            generate_dijkstar_map(ctx->flowQueue, ctx->costs, ctx->map, targetTile, ctx->mapH, ctx->mapW);
-        }
         for (int i = 0; i < *(ctx->unitCount); i++)
         {
             if (ctx->unitList[i].isSelected)
