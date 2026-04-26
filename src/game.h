@@ -18,6 +18,7 @@ typedef struct {
     // State για το UI
     bool *isDragging;
     Vector2 *boxStartPoint;
+    Camera2D *cam;
 }GameContext;
 
 #endif

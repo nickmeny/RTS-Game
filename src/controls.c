@@ -11,7 +11,7 @@ void HandleMouseInputs(GameContext *ctx)
 {
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
     {
-        Vector2 mouseTarget = GetMousePosition();
+        Vector2 mouseTarget = GetScreenToWorld2D(GetMousePosition(), *ctx->cam);
         // Point targetTile = {(int)mouseTarget.x / 30, (int)mouseTarget.y / 30};
 
         for (int i = 0; i < *(ctx->unitCount); i++)
@@ -28,7 +28,7 @@ void HandleMouseInputs(GameContext *ctx)
     {
         if (*(ctx->unitCount) < ctx->maxUnits)
         {
-            Vector2 pos = GetMousePosition();
+            Vector2 pos =GetScreenToWorld2D(GetMousePosition(), *ctx->cam);
             // This section is only for the visuals to make the asset to spawn in the tip of the mouse
             Vector2 adjustedPos = {pos.x - (float)ctx->warriorData->body.bodyCenter[0].x, pos.y - (float)ctx->warriorData->body.bodyCenter[0].y};
 
@@ -42,7 +42,7 @@ void HandleMouseInputs(GameContext *ctx)
 
     { // Enable the Selection
         *(ctx->isDragging) = true;
-        *(ctx->boxStartPoint) = GetMousePosition();
+        *(ctx->boxStartPoint) = GetScreenToWorld2D(GetMousePosition(), *ctx->cam);
         // if (!IsKeyDown(KEY_LEFT_SHIFT)) {
         //     for(int i = 0; i < *count; i++) unitList[i].isSelected = false;
         // }
@@ -51,7 +51,7 @@ void HandleMouseInputs(GameContext *ctx)
     if (*(ctx->isDragging))
     {
 
-        Vector2 currentMousePos = GetMousePosition();
+        Vector2 currentMousePos = GetScreenToWorld2D(GetMousePosition(), *ctx->cam);
 
         // Draw the selection Rec
         Rectangle selectionBox = {
@@ -88,4 +88,17 @@ void HandleMouseInputs(GameContext *ctx)
             *(ctx->isDragging) = false;
         }
     }
+}
+
+void CameraMovment(Camera2D *cam) {
+    float speed = 500.0f * GetFrameTime();
+    
+    if (IsKeyDown(KEY_W)) cam->target.y -= speed;
+    if (IsKeyDown(KEY_S)) cam->target.y += speed;
+    if (IsKeyDown(KEY_A)) cam->target.x -= speed;
+    if (IsKeyDown(KEY_D)) cam->target.x += speed;
+    
+    float wheel = GetMouseWheelMove();
+    cam->zoom += wheel * 0.1f;
+    if (cam->zoom < 0.1f) cam->zoom = 0.1f;
 }

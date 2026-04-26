@@ -6,5 +6,5 @@
 #include <stdlib.h>
 
 void HandleMouseInputs(GameContext *ctx);
-
+void CameraMovment(Camera2D *cam);
 #endif
