@@ -11,6 +11,7 @@ make raylib
 ```
 to compile the raylib lib.
 
+You need to decompress all the 7z and zip files. 
 ## Compile the game
 
 To compile the game just in the root dir run 
@@ -26,3 +27,5 @@ For clean build you can destroy the build dir with
 ```bash
 make clean
 ```
+
+## IMPORTANT: IF YOU ADD SPRITES OR ANY ASSETS YOU HAVE TO COMPRESSE THEM AND PUSH IT AS 7Z TO SAVE SPACE 
