@@ -3,7 +3,6 @@
 #include "game.h"
 #include "controls.h"
 #include "./map/map.h"
-
 int main(void)
 {
 
@@ -29,6 +28,8 @@ int main(void)
 
     int unitCount = 0;
 
+    Map map = create_map();
+
     GameContext ctx =
         {
             .unitList = units,
@@ -37,10 +38,11 @@ int main(void)
             .warriorData = &warriorData,
             .isDragging = &isDragging,
             .boxStartPoint = &boxStartPoint,
-            .cam = &camera
+            .cam = &camera,
+            .map = &map,
+            .astar = AStar_Create(&map)
         };
 
-    Map map = create_map();
     while (!WindowShouldClose())
     {
         for (int i = 0; i < unitCount; i++)
@@ -54,9 +56,9 @@ int main(void)
         }
         CameraMovment(&camera);
         BeginDrawing();
+        ClearBackground(WHITE);
         BeginMode2D(camera);
         DrawChunksFromMemory(&map,&camera);
-        ClearBackground(WHITE);
         HandleMouseInputs(&ctx);
         for (int i = 0; i < unitCount; i++)
         {
@@ -65,8 +67,10 @@ int main(void)
                 units[i].Draw(&units[i]);
             }
         }
+
         EndMode2D();
         EndDrawing();
+
     }
     UnloadTexture(warriorData.Idle.texture);
     UnloadTexture(warriorData.Run.texture);

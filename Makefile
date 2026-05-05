@@ -1,10 +1,10 @@
 TARGET = game
 CC = gcc
-CFLAGS = -Wall -std=c99 -Iinclude -O2 -g -O0
-LIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+CFLAGS = -Wall -std=c99 -Iinclude -Ibuild/_deps/raylib-src/src -O2 -g -O0
+LIBS = build/_deps/raylib-build/raylib/libraylib.a -lGL -lm -lpthread -ldl -lrt -lX11
 
 SRC_DIR = src
-OBJ_DIR = build
+OBJ_DIR = build/obj
 
 # 1. Find ALL .c files in src and its subfolders
 SRCS = $(shell find $(SRC_DIR) -name '*.c')

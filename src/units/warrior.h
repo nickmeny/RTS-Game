@@ -11,7 +11,7 @@
 
 void DrawWarrior(Unit * self);
 UnitData Init_Warrior();
-Unit Create_Warrior(UnitData* data,Vector2 startPos,int *id);
+Unit Create_Warrior(UnitData* data,Vector2 startPos,int *id,Map * map);
 
 static const SpriteOffsets WARRIOR_IDLE_OFFSETS = {
     WARRIOR_IDLE_MIN_X_OFFSET,

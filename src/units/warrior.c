@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include "warrior.h"
 #include <stdlib.h>
+#include <math.h>      // <-- για το sqrtf
 
 
 
@@ -57,13 +58,62 @@ void DrawWarrior(Unit * self)
 
 }
 
+void UpdateWarrior(Unit * self)
+{
+    float dx = self->targetPos.x - self->pos.x;
+    float dy = self->targetPos.y - self->pos.y;
+    float dist = sqrtf(dx*dx + dy*dy);
 
-//TODO
-void UpdateWarrior(Unit * self){
-    return;
+    if (dist > 5.0f) 
+    {
+        self->pos.x += (dx / dist) * self->data->speed * GetFrameTime();
+        self->pos.y += (dy / dist) * self->data->speed * GetFrameTime();
+        
+        self->currentState = STATE_RUN;
+        if (dx < 0) self->isFacingLeft = true;
+        else if (dx > 0) self->isFacingLeft = false;
+    }
+    else
+    {
+        // 2. ΕΔΩ ΕΙΝΑΙ Η ΚΡΙΣΙΜΗ ΑΛΛΑΓΗ
+        if (self->path != NULL && self->currentPathIndex < self->pathLength)
+        {
+            int currentChunkId = self->path[self->currentPathIndex];
+            
+            // Έλεγχος αν το ID είναι έγκυρο πριν το χρησιμοποιήσουμε
+            if (currentChunkId < 0 || currentChunkId >= CHUNKS_NUMBER) {
+                free(self->path);
+                self->path = NULL;
+                self->pathLength = 0;
+                self->currentState = STATE_IDLE;
+                return;
+            }
+
+            if (self->currentPathIndex < self->pathLength - 1)
+            {
+                int nextChunkId = self->path[self->currentPathIndex + 1];
+                
+                // Διπλοτσεκάρουμε και το επόμενο ID
+                if (nextChunkId >= 0 && nextChunkId < CHUNKS_NUMBER) {
+                    self->targetPos = GetNextWaypoint(self->map, currentChunkId, nextChunkId);
+                    self->currentPathIndex++;
+                }
+            }
+            else 
+            {
+                // Τελευταίο chunk
+                self->targetPos = self->finalTarget;
+                free(self->path);
+                self->path = NULL;
+                self->pathLength = 0;
+            }
+        }
+        else
+        {
+            self->currentState = STATE_IDLE;
+        }
+    }
 }
-
-
 //This Func returns a UnitData initializetion.
 UnitData Init_Warrior()
 {
@@ -98,7 +148,7 @@ UnitData Init_Warrior()
 }
 
 //That create the Unit in memory
-Unit Create_Warrior(UnitData* data,Vector2 startPos,int *id)
+Unit Create_Warrior(UnitData* data,Vector2 startPos,int *id,Map* map)
 {
     Unit w = {0}; // Initialize all to zero
     w.id = *id;
@@ -108,8 +158,13 @@ Unit Create_Warrior(UnitData* data,Vector2 startPos,int *id)
     w.currentState = STATE_IDLE;
     w.isFacingLeft = false;
     w.State = (AnimateState){0};
+    w.path = NULL;
+    w.pathLength = 0;
+    w.currentPathIndex = 0;
+    w.map = map;
     w.Draw = DrawWarrior; 
     w.Update = UpdateWarrior;
+    w.targetPos = startPos;
     return w;
 }
 

@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "../util/animation.h"
 #include "../basic_headers/basics.h"
+#include "../map/map.h"
 //Forward declaration
 typedef struct Unit Unit;
 
@@ -52,16 +53,24 @@ struct Unit
 {
     bool isSelected; //for the selection
     bool isFacingLeft;
+    
     int id; //a uniq id
     int curHealth; //health of its unit right now
+    int*  path;            // πίνακας από chunkIds
+    int   pathLength;      
+    int   currentPathIndex;
+    
     UnitData * data;
     Vector2 targetPos;
     Vector2 pos;
+    Vector2 finalTarget; 
     AnimateState State;
     UnitState currentState;
     MovementGroup *group;
-    void (*Draw)(Unit *self);
+    Map * map;
+    
     void (*Update)(Unit *self);
+    void (*Draw)(Unit *self);
 };
 
 
